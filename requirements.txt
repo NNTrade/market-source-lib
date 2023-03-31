@@ -1,0 +1,5 @@
+NNTrade.common @ git+https://git@github.com/NNTrade/common.git#egg=NNTrade.common
+NNTrade.indicators @ git+https://git@github.com/NNTrade/IndicatorFactory.git#egg=NNTrade.indicators
+pandas_ta
+numpy
+pandas
