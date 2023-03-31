@@ -9,7 +9,9 @@ from logging import getLogger
 import NNTrade.common.candle_col_name as col
 import pandas as pd
 from datetime import datetime
-
+from ..tools.progress_log import ProgressLog
+import NNTrade.common.candle_col_name as col_name
+from ..tools.filter_df import filter_df
 
 class QuoteSourceClientCSV(AbsStockQuoteClient):
     def __init__(self, base_path: str):
@@ -34,7 +36,7 @@ class QuoteSourceClientCSV(AbsStockQuoteClient):
         self.file_list[stock][timeframe] = file_name
         self.logger.info("File %s to stock %s timeframe %s added to client", file_path, stock, timeframe.full_name())
 
-    def get(self, stock: str, timeframe: TimeFrame, from_date: date = None, untill_date: date = None) -> StockQuoteContainer:
+    def get(self, stock: str, timeframe: TimeFrame, from_date: date = None, untill_date: date = None) -> pd.DataFrame:
        if stock not in self.file_list.keys():
           raise Exception("Stock not register in client")
        else:
@@ -46,23 +48,32 @@ class QuoteSourceClientCSV(AbsStockQuoteClient):
        file_path = os.path.join(self.base_path, stock_tf_dict[timeframe])
        self.logger.info("Load file %s", file_path)
 
-       candle_arr:List[Candle] = self.read_csv(file_path,from_date,untill_date)
-       return StockQuoteContainer([candle for candle in candle_arr if (from_date is None or candle.datetime.date() >= from_date) and (untill_date is None or candle.datetime.date() < untill_date)])
+       csv_df = self.read_csv(file_path)
+       return filter_df(csv_df, from_date, untill_date)
 
-    def read_csv(self,file_path:str, from_date: date=None, untill_date: date=None)->List[Candle]:
+    def read_csv(self,file_path:str)->pd.DataFrame:
        ...
             
 class QuoteSourceClientFinamCSV(QuoteSourceClientCSV):
     def __init__(self, base_path: str):
        super().__init__(base_path)
-    def read_csv(self,file_path:str, from_date: date=None, untill_date: date=None)->List[Candle]:
+
+    def read_csv(self,file_path:str)->pd.DataFrame:
+        self.logger.info("start reading csv")
         df = pd.read_csv(file_path, sep=";", decimal=".", header=0,dtype={"<DATE>":str,"<TIME>":str})
-        c_arr =[]
-        for index, sr in df.iterrows():
-          dt = datetime.strptime(sr["<DATE>"]+sr["<TIME>"], "%Y%m%d%H%M%S")
-          if (from_date is None or dt.date() >= from_date) and (untill_date is None or dt.date() < untill_date):
-            c_arr.append(Candle(dt, sr["<OPEN>"], sr["<HIGH>"], sr["<LOW>"], sr["<CLOSE>"], sr["<VOL>"]))
-        return c_arr
+        
+        self.logger.info("start parsing csv DataFrame")
+        df["dt_str"] = df["<DATE>"].astype(str) +df["<TIME>"].astype(str)
+        df[col_name.INDEX] = pd.to_datetime(df["dt_str"], format="%Y%m%d%H%M%S")
+        df =    df.rename(columns=
+                       {"<OPEN>":col_name.OPEN,
+                        "<HIGH>":col_name.HIGH,
+                        "<LOW>":col_name.LOW,
+                        "<CLOSE>":col_name.CLOSE,
+                        "<VOL>":col_name.VOLUME })\
+                  .set_index(col_name.INDEX)
+        self.logger.info("finish parsing csv DataFrame")
+        return df[[col_name.OPEN,col_name.HIGH,col_name.LOW,col_name.CLOSE,col_name.VOLUME]]
 
        
     

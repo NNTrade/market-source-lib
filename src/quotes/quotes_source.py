@@ -36,8 +36,10 @@ class QuoteSource:
         if not self.quote_cache.stock_quotes_is_exist(stock, step_timeframe, timeframe):
             self._logger.info(
                 "Cann't find quotes for %s %s by step %s", stock, timeframe, step_timeframe)
-            quote_stock_cnt:StockQuoteContainer = self.quote_source_client.get(stock, step_timeframe, from_date, untill_date)
-            self.quote_cache.save_stock_quotes(stock, step_timeframe, quote_stock_cnt.to_df())
+            self._logger.info("get request quotes from client")
+            quote_stock_df:pd.DataFrame = self.quote_source_client.get(stock, step_timeframe, from_date, untill_date)
+            self._logger.info("save quotes in cache")
+            self.quote_cache.save_stock_quotes(stock, step_timeframe, quote_stock_df)
             if step_timeframe != timeframe:
                 DfCondenser.LoopByCondesers(
                     stock, step_timeframe, [timeframe], self.quote_cache)

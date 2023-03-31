@@ -38,8 +38,7 @@ class QuoteSourceClientCSV_TestCase(unittest.TestCase):
                 125 ] }, index=[datetime(2021,4,2,0,2),datetime(2021,4,2,0,3),datetime(2021,4,3,0,4),datetime(2021,4,3,0,5)])
     expected_df.index.name = INDEX
     # Act
-    asserted_sqcnt = qsc.get("EURUSD", TimeFrame.m1, date(2021,4,2), date(2021,4,4))
-    asserted_df = asserted_sqcnt.to_df()
+    asserted_df = qsc.get("EURUSD", TimeFrame.m1, date(2021,4,2), date(2021,4,4))
     # Assert
     self.logger.info(asserted_df)
     self.logger.info(expected_df)

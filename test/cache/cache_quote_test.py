@@ -25,7 +25,7 @@ class CacheQuote_TestCase(unittest.TestCase):
     # Array
     qsc = QuoteSourceClientFinamCSV("test/cache/test_data")
     qsc.add_file("test.MINUTE1.csv", "EURUSD", TimeFrame.m1)
-    expected_df = qsc.get("EURUSD", TimeFrame.m1).to_df()
+    expected_df = qsc.get("EURUSD", TimeFrame.m1)
 
     # Act
     self.fc.save_stock_quotes("EURUSD", TimeFrame.m1, expected_df)

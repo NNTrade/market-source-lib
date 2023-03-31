@@ -2,7 +2,7 @@ from ..cache.abs_cache_indicator import AbsCacheIndicator
 from ..quotes.quotes_source import QuoteSource, TimeFrame
 import pandas as pd
 from typing import List, Dict
-from ..tools.progress_log import ProgressLog
+from ..tools.progress_log import ProgressLogDate
 from NNTrade.indicators import IndicatorSettings, AbsIndicator, IndicatorFactory
 from datetime import date
 from logging import getLogger
@@ -78,7 +78,7 @@ class IndicatorSource:
         for cfg in indicators_cfg_list:
             ind_list.append(self._indicator_factory.create(cfg))
 
-        progressLog = ProgressLog(logger=self._logger)
+        progressLog = ProgressLogDate(work_df.index[0],logger=self._logger)
 
         for index, row in work_df.iterrows():
             for ind_inst in ind_list:

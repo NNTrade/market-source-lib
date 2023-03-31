@@ -1,4 +1,4 @@
-from ..base_func import filter_df
+from ...tools.filter_df import filter_df
 from .basic_func import join_cache_path, save_df, load_df, get_file_path_csv, join_cache_path, config_to_name
 from ..abs_cache_indicator import AbsCacheIndicator, IndicatorSettings, TimeFrame, pd, date
 import os

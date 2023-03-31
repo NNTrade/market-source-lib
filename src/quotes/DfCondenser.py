@@ -5,7 +5,7 @@ import pandas as pd
 from typing import List
 from tqdm import tqdm
 from ..cache.abs_cache_quote import AbsCacheQuote
-from ..tools.progress_log import ProgressLog
+from ..tools.progress_log import ProgressLogDate
 from logging import getLogger
 from datetime import datetime
 
@@ -31,7 +31,7 @@ class DfCondenser():
 
       logger.info("Condense %s %s from %s", stock,
                   condenser.target_tf.full_name(), timeframe_base.full_name())
-      pl = ProgressLog()
+      pl = ProgressLogDate(base_df.index[0], logger=logger)
       for index, row in base_df.iterrows():
         open = row[OPEN]
         close = row[CLOSE]

@@ -10,7 +10,7 @@ class AbsStockQuoteClient(ABC):
     Args:
         ABC (_type_): _description_
     """
-    def get(self, stock:str, timeframe:TimeFrame, from_date: date = None, untill_date: date = None)->StockQuoteContainer:
+    def get(self, stock:str, timeframe:TimeFrame, from_date: date = None, untill_date: date = None)->pd.DataFrame:
         """Get stock data by timeframe
 
         Args:
