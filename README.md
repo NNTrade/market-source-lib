@@ -11,6 +11,9 @@
 - timeframe|tf - interval of time which contain in one candle
 
 ## How to use
+### Import to pip
+NNTrade.source.market @ git+https://git@github.com/NNTrade/market-source-lib.git#egg=NNTrade.source.market
+
 ### QyoteSource
 [Package]("./src/quotes/__init__.py")
 1. Создаем вспомогательные объекты
