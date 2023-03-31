@@ -21,7 +21,7 @@ class QuoteSourceClientCSV(AbsStockQuoteClient):
       self.file_list: Dict[str, Dict[TimeFrame, str]] = {}
       self.base_path = base_path
       self.logger = getLogger("QuoteSourceClientCSV")
-
+   
     def add_file(self, file_name: str, stock: str, timeframe: TimeFrame):
 
         file_path = os.path.join(self.base_path, file_name)

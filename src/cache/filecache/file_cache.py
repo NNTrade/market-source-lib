@@ -1,5 +1,5 @@
-from src.cache.filecache.file_cache_indicator import FileCacheIndicator
-from src.cache.filecache.file_cache_quote import FileCacheQuote
+from .file_cache_indicator import FileCacheIndicator
+from .file_cache_quote import FileCacheQuote
 from .basic_func import join_cache_path
 from ..abs_cache import AbsCache, AbsCacheQuote, AbsCacheIndicator
 import os
