@@ -3,7 +3,6 @@ from NNTrade.common import TimeFrame, INDEX, CLOSE, OPEN, HIGH, LOW, VOLUME
 from .CondenserToTf import CondenserToTf, get_condenser_to_timeframe
 import pandas as pd
 from typing import List
-from tqdm import tqdm
 from ..cache.abs_cache_quote import AbsCacheQuote
 from ..tools.progress_log import ProgressLogDate
 from logging import getLogger
