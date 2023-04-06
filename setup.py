@@ -4,7 +4,7 @@ import setuptools
 import os
 from pathlib import Path
 
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 
 install_requires = []
 for req_file in ["requirements.txt"]:

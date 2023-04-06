@@ -11,7 +11,7 @@ class QuoteSource:
         self.quote_source_client = quote_source_client
         self._logger = getLogger("QuoteFactory")
         pass
-
+    
     def get(self,  stock: str, timeframe: TimeFrame, from_date: date = None, untill_date: date = None,  step_timeframe: TimeFrame = None) -> pd.DataFrame:
         """Get Pandas DataFrame with stock quote data
 
@@ -33,15 +33,25 @@ class QuoteSource:
         if step_timeframe.to_seconds() > timeframe.to_seconds():
             raise Exception("step_timeframe must be <= timeframe")
         
-        if not self.quote_cache.stock_quotes_is_exist(stock, step_timeframe, timeframe):
+        if not self.quote_cache.stock_quotes_is_exist(stock, timeframe, timeframe):
             self._logger.info(
-                "Cann't find quotes for %s %s by step %s", stock, timeframe, step_timeframe)
-            self._logger.info("get request quotes from client")
-            quote_stock_df:pd.DataFrame = self.quote_source_client.get(stock, step_timeframe, from_date, untill_date)
-            self._logger.info("save quotes in cache")
-            self.quote_cache.save_stock_quotes(stock, step_timeframe, quote_stock_df)
-            if step_timeframe != timeframe:
-                DfCondenser.LoopByCondesers(
-                    stock, step_timeframe, [timeframe], self.quote_cache)
+                "Cann't find quotes for %s %s by step %s", stock, timeframe, timeframe)
+            
+            if step_timeframe == timeframe:
+                self._logger.info("get request quotes from client")
+                quote_stock_df:pd.DataFrame = self.quote_source_client.get(stock, timeframe, from_date, untill_date)
+                self._logger.info("save quotes in cache")
+                self.quote_cache.save_stock_quotes(stock, timeframe, quote_stock_df)
+                
+            elif step_timeframe != timeframe:
+                self._logger.info("get based df %s %s", stock, step_timeframe.full_name())
+                base_df = self.get("EURUSD", step_timeframe, from_date, untill_date)
+                
+                self._logger.info("Condense data")
+                condensed_df = DfCondenser.Condense(base_df, step_timeframe, timeframe)
+                
+                self._logger.info("save quotes in cache")
+                self.quote_cache.save_stock_quotes(stock, step_timeframe, condensed_df, timeframe)
+
             
         return self.quote_cache.load_stock_quotes(stock, step_timeframe, from_date, untill_date, timeframe)

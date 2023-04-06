@@ -2,7 +2,7 @@ from __future__ import annotations
 from NNTrade.common import TimeFrame, INDEX, CLOSE, OPEN, HIGH, LOW, VOLUME
 from .CondenserToTf import CondenserToTf, get_condenser_to_timeframe
 import pandas as pd
-from typing import List
+from typing import List,Dict
 from ..cache.abs_cache_quote import AbsCacheQuote
 from ..tools.progress_log import ProgressLogDate
 from logging import getLogger
@@ -19,17 +19,17 @@ class DfCondenser():
     pass
 
   @staticmethod
-  def LoopByCondesers(stock: str, timeframe_base: TimeFrame, timeframe_list: List[TimeFrame], cache: AbsCacheQuote):
+  def Condense(base_df:pd.DataFrame, timeframe_base: TimeFrame, timeframe_target: TimeFrame)->pd.DataFrame:
+    condeser_dic = DfCondenser.LoopByCondesers(base_df, timeframe_base, [timeframe_target])
+    return condeser_dic[timeframe_target]
+  
+  @staticmethod
+  def LoopByCondesers(base_df:pd.DataFrame, timeframe_base: TimeFrame, timeframe_list: List[TimeFrame])->Dict[TimeFrame, pd.DataFrame]:
     logger = getLogger("DfCondenser.LoopByCondesers")
-    base_df = cache._load_stock_quotes(stock, timeframe_base)
     condensers = [DfCondenser(tf) for tf in timeframe_list]
+    _ret_dic:Dict[TimeFrame, pd.DataFrame] = {}
     for condenser in condensers:
-      if cache.aggregated_stock_quotes_is_exist(stock, timeframe_base, condenser.target_tf):
-        raise Exception(
-            f"Aggregation to time frame {condenser.target_tf.full_name()} already exist")
-
-      logger.info("Condense %s %s from %s", stock,
-                  condenser.target_tf.full_name(), timeframe_base.full_name())
+      logger.info("Condense %s from %s", condenser.target_tf.full_name(), timeframe_base.full_name())
       pl = ProgressLogDate(base_df.index[0], logger=logger)
       for index, row in base_df.iterrows():
         open = row[OPEN]
@@ -42,13 +42,11 @@ class DfCondenser():
         pl.check(index)
 
       condenser.finish()
-
-      cache.save_aggregated_stock_quotes(
-          stock, timeframe_base, condenser.target_tf, condenser.result)
-
+      
+      _ret_dic[condenser.target_tf] = condenser.result
       condenser.clear()
-      logger.info("Condensing %s %s from %s. DONE", stock,
-                  condenser.target_tf.full_name(), timeframe_base.full_name())
+      logger.info("Condensing %s from %s. DONE", condenser.target_tf.full_name(), timeframe_base.full_name())
+    return _ret_dic
 
   def _clear_tmp(self):
     self._index_arr = []

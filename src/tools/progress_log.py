@@ -1,6 +1,6 @@
 from logging import getLogger, Logger
 import math
-from datetime import date
+from datetime import date,datetime
 
 class ProgressLog:
     def __init__(self, index_len_log: int = 6, logger: Logger = None, init_index: int = 0):
@@ -28,8 +28,8 @@ class ProgressLogDate:
     def _cut_index(self, index: date) -> date:
         return index.replace(day=1)
 
-    def check(self, cur_index: date):
-        cur_cutted_index = self._cut_index(cur_index)
+    def check(self, cur_index: datetime):
+        cur_cutted_index = self._cut_index(cur_index.date())
         if cur_cutted_index != self._cur_index:
             self.__logger.info("Passed %s", cur_index)
             self._cur_index = cur_cutted_index
