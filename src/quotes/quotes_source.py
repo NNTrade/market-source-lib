@@ -33,7 +33,7 @@ class QuoteSource:
         if step_timeframe.to_seconds() > timeframe.to_seconds():
             raise Exception("step_timeframe must be <= timeframe")
         
-        if not self.quote_cache.stock_quotes_is_exist(stock, timeframe, timeframe):
+        if not self.quote_cache.stock_quotes_is_exist(stock, step_timeframe, timeframe):
             self._logger.info(
                 "Cann't find quotes for %s %s by step %s", stock, timeframe, timeframe)
             
