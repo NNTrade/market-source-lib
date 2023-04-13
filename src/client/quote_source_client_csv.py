@@ -75,5 +75,18 @@ class QuoteSourceClientFinamCSV(QuoteSourceClientCSV):
         self.logger.info("finish parsing csv DataFrame")
         return df[[col_name.OPEN,col_name.HIGH,col_name.LOW,col_name.CLOSE,col_name.VOLUME]]
 
+class QuoteSourceClientDefaultCSV(QuoteSourceClientCSV):
+   def __init__(self, base_path: str, sep = ",", decimal = "."):
+      super().__init__(base_path)
+      self.sep = sep
+      self.decimal = decimal
+
+   def read_csv(self,file_path:str)->pd.DataFrame:
+      self.logger.info("start reading csv")
+      df = pd.read_csv(file_path, decimal=self.decimal, sep=self.sep, header=0, index_col=0)
+      df.index = pd.DatetimeIndex(df.index)
+      self.logger.info("finish parsing csv DataFrame")
+      return df
+
        
     
