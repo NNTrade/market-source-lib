@@ -2,6 +2,7 @@ from typing import List, Dict
 import os
 import json
 import pandas as pd
+from ...quotes.DfCondenser import AGGR_INDEX
 
 def join_cache_path_arr(start_path, paths:List[str])->str:
     _return = start_path
@@ -40,6 +41,8 @@ def load_df(file_path:str, header_cols:List[int] = [0])->pd.DataFrame:
     raise Exception(f"Cache file {file_path} doesn't exist")
   df = pd.read_csv(file_path, sep=";", decimal=",", index_col=0, header=header_cols)
   df.index = pd.to_datetime(df.index)
+  if AGGR_INDEX in df.columns:
+    df[AGGR_INDEX] = pd.to_datetime(df[AGGR_INDEX])
   return df.sort_index()
 
 def config_to_name(indicator_args:Dict[str, float])->str:
