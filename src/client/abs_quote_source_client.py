@@ -3,6 +3,7 @@ from datetime import date
 from NNTrade.common import TimeFrame
 import pandas as pd
 from ..common import StockQuoteContainer
+from typing import List, Tuple, Dict
 
 class AbsStockQuoteClient(ABC):
     """Abstacrt client to get data of stock quotes
@@ -21,5 +22,13 @@ class AbsStockQuoteClient(ABC):
 
         Returns:
             StockQuoteContainer: _description_
+        """
+        ...
+
+    def stocks(self) -> Dict[TimeFrame, List[str]]:
+        """Get list timeframe and stocks
+
+        Returns:
+            Dict[TimeFrame,List[str]]: list of timeframe and stocks
         """
         ...

@@ -44,3 +44,25 @@ class QuoteSourceClientCSV_TestCase(unittest.TestCase):
     self.logger.info(expected_df)
     compare_df(self, expected_df, asserted_df)
     self.assertEqual(expected_df.index.name, asserted_df.index.name)
+
+  def test_WHEN_request_stock_THEN_get_correct(self):
+    # Array
+    qsc = QuoteSourceClientFinamCSV("test/client")
+    qsc.add_file("test.MINUTE1.csv", "EURUSD", TimeFrame.m1)
+    qsc.add_file("test.MINUTE1.csv", "EURUSD", TimeFrame.H)
+    qsc.add_file("test.MINUTE1.csv", "EURCAD", TimeFrame.m1)
+    qsc.add_file("test.MINUTE1.csv", "EURCAD", TimeFrame.H)
+    expected_dic = {
+        TimeFrame.m1: ["EURUSD", "EURCAD"],
+        TimeFrame.H: ["EURUSD", "EURCAD"]
+    }
+
+    # Act
+    asserted_dic = qsc.stocks()
+
+    # Assert
+    for k, v in expected_dic.items():
+      asserted_list = asserted_dic[k]
+      self.assertEqual(len(asserted_list), 2)
+      self.assertTrue("EURUSD" in asserted_list)
+      self.assertTrue("EURCAD" in asserted_list)

@@ -1,5 +1,5 @@
 from ..common.stock_quote_container import StockQuoteContainer
-from ..client.abs_quote_source_client import AbsStockQuoteClient
+from ..client.abs_quote_source_client import AbsStockQuoteClient, Dict, List
 from ..cache.abs_cache_quote import AbsCacheQuote, TimeFrame, date, pd
 from .DfCondenser import DfCondenser
 from logging import getLogger
@@ -55,3 +55,11 @@ class QuoteSource:
 
             
         return self.quote_cache.load_stock_quotes(stock, step_timeframe, from_date, untill_date, timeframe)
+
+    def stocks(self) -> Dict[TimeFrame, List[str]]:
+        """Get list timeframe and stocks
+
+        Returns:
+            Dict[TimeFrame,List[str]]: list of timeframe and stocks
+        """
+        return self.quote_source_client.stocks()
