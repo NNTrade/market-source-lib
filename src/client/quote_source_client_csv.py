@@ -19,7 +19,7 @@ class QuoteSourceClientCSV(AbsStockQuoteClient):
       """_summary_
 
       Args:
-            path (str): path to folder with csv files
+            base_path (str): path to folder with csv files
       """
       self.file_list: Dict[str, Dict[TimeFrame, str]] = {}
       self.base_path = base_path

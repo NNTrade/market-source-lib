@@ -4,9 +4,15 @@ from ..cache.abs_cache_quote import AbsCacheQuote, TimeFrame, date, pd
 from .DfCondenser import DfCondenser
 from logging import getLogger
 
-
+"""Main tool to get quotes
+"""
 class QuoteSource:
     def __init__(self, quote_cache: AbsCacheQuote, quote_source_client:AbsStockQuoteClient) -> None:
+        """
+        Args:
+            quote_cache (AbsCacheQuote): chache storage class
+            quote_source_client (AbsStockQuoteClient): source to get basic stock quotes
+        """
         self.quote_cache = quote_cache
         self.quote_source_client = quote_source_client
         self._logger = getLogger("QuoteFactory")
