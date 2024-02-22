@@ -1,6 +1,6 @@
 import unittest
 import logging
-from src.client.quote_source_client_csv import QuoteSourceClientFinamCSV, TimeFrame,date, pd
+from src.client.realization.quote_source_client_csv import QuoteSourceClientFinamCSV, TimeFrame,date, pd
 from NNTrade.common.candle_col_name import OPEN, HIGH, LOW, CLOSE, VOLUME, INDEX
 from datetime import datetime
 from test.compare_df import compare_df

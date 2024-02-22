@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 from NNTrade.common import CLOSE, OPEN, HIGH, CLOSE, VOLUME,LOW, TimeFrame, INDEX
 from src.cache.filecache.file_cache_quote import FileCacheQuote
-from src.client.quote_source_client_csv import QuoteSourceClientFinamCSV, StockQuoteContainer
+from src.client.realization.quote_source_client_csv import QuoteSourceClientFinamCSV, StockQuoteContainer
 import os
 import shutil
 from test.compare_df import compare_df

@@ -1,7 +1,7 @@
 import unittest
 import logging
 from src.cache.in_memory.in_memory_quote import InMemoryQuoteCache
-from src.client.quote_source_client_csv import QuoteSourceClientFinamCSV
+from src.client.realization.quote_source_client_csv import QuoteSourceClientFinamCSV
 from src.quotes import QuoteSource, pd, TimeFrame, date
 from NNTrade.common.candle_col_name import OPEN, CLOSE, HIGH, LOW, VOLUME, INDEX
 from test.compare_df import compare_df

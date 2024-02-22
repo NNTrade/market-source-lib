@@ -1,6 +1,6 @@
 import unittest
 import logging
-from src.client.quote_source_client_csv import QuoteSourceClientFinamCSV
+from src.client.realization.quote_source_client_csv import QuoteSourceClientFinamCSV
 from src.indicators.indicator_source import IndicatorSource, QuoteSource, pd
 from src.cache.in_memory import InMemoryIndicatorCache, InMemoryQuoteCache, TimeFrame, date
 from NNTrade.common.candle_col_name import OPEN, HIGH, LOW, CLOSE, VOLUME, INDEX
