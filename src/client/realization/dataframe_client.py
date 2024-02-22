@@ -13,6 +13,7 @@ class DataFrameClient(AbsStockQuoteClient):
     def add_df(self, stock:str, timeframe:TimeFrame, data_df: pd.DataFrame):
         stocks_dic = self._df_dic.get(timeframe, {})
         stocks_dic[stock] = data_df
+        self._df_dic[timeframe] = stocks_dic
 
     def get(self, stock:str, timeframe:TimeFrame, from_date: date = None, untill_date: date = None)->pd.DataFrame:
         """Get stock data by timeframe
